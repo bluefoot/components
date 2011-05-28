@@ -15,34 +15,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
-	<component>
-		<component-type>info.bluefoot.DataNavigator</component-type>
-		<component-class>info.bluefoot.component.datanavigator.DataNavigator</component-class>
-	</component>
-  
-    <component>
-        <component-type>info.bluefoot.DataOrderer</component-type>
-        <component-class>info.bluefoot.component.dataorderer.DataOrderer</component-class>
-    </component>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+  <component>
+    <component-type>info.bluefoot.DataNavigator</component-type>
+    <component-class>info.bluefoot.component.datanavigator.DataNavigator</component-class>
+  </component>
 
-	<component>
-		<component-type>org.primefaces.component.AjaxStatus</component-type>
-		<component-class>org.primefaces.component.ajaxstatus.AjaxStatus</component-class>
-	</component>
+  <component>
+    <component-type>info.bluefoot.DataOrderer</component-type>
+    <component-class>info.bluefoot.component.dataorderer.DataOrderer</component-class>
+  </component>
 
-	<render-kit>
-		<renderer>
-			<component-family>info.bluefoot.component</component-family>
-			<renderer-type>info.bluefoot.DataNavigator</renderer-type>
-			<renderer-class>info.bluefoot.component.datanavigator.DataNavigatorRenderer</renderer-class>
-		</renderer>
-        <renderer>
-            <component-family>info.bluefoot.component</component-family>
-            <renderer-type>info.bluefoot.DataOrderer</renderer-type>
-            <renderer-class>info.bluefoot.component.dataorderer.DataOrdererRenderer</renderer-class>
-        </renderer>
-	</render-kit>
+  <render-kit>
+    <renderer>
+      <component-family>info.bluefoot.component</component-family>
+      <renderer-type>info.bluefoot.DataNavigator</renderer-type>
+      <renderer-class>info.bluefoot.component.datanavigator.DataNavigatorRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>info.bluefoot.component</component-family>
+      <renderer-type>info.bluefoot.DataOrderer</renderer-type>
+      <renderer-class>info.bluefoot.component.dataorderer.DataOrdererRenderer</renderer-class>
+    </renderer>
+  </render-kit>
 
 </faces-config>

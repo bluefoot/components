@@ -26,7 +26,7 @@ limitations under the License.
     <tag-name>dataNavigator</tag-name>
     <component>
       <component-type>info.bluefoot.DataNavigator</component-type>
-      <render-type>info.bluefoot.DataNavigator</render-type>
+      <renderer-type>info.bluefoot.DataNavigator</renderer-type>
     </component>
     <attribute>
       <description></description>
@@ -52,7 +52,7 @@ limitations under the License.
     <tag-name>dataOrderer</tag-name>
     <component>
       <component-type>info.bluefoot.DataOrderer</component-type>
-      <render-type>info.bluefoot.DataOrderer</render-type>
+      <renderer-type>info.bluefoot.DataOrderer</renderer-type>
     </component>
     <attribute>
       <description></description>
