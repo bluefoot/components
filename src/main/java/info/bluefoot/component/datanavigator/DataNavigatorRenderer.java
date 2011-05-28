@@ -63,15 +63,22 @@ public class DataNavigatorRenderer extends Renderer {
         if(log.isDebugEnabled()) {
             log.debug("encoding DataNavigatorRender");
         }
+        
+        // ~ Getting the tools  ==========================================
+        
         DataNavigator dataNavigator = (DataNavigator) component;
         ResponseWriter writer = context.getResponseWriter();
         LazyDataModel model = dataNavigator.getModel();
+        
+        // ~ Root element  ===============================================
         
         writer.startElement("div", dataNavigator);
         writer.writeAttribute("id", dataNavigator.getClientId(context), "id");
         if(dataNavigator.getStyleClass()!=null) {
             writer.writeAttribute("class", dataNavigator.getStyleClass(), "styleClass");
         }
+        
+        // ~ Links   ======================================================
         
         String innerStyleClass = "";
         if(!GenericValidator.isBlankOrNull(dataNavigator.getInnerStyleClass())) {

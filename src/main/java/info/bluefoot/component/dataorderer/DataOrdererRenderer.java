@@ -54,21 +54,39 @@ public class DataOrdererRenderer extends Renderer {
         if(log.isDebugEnabled()) {
             log.debug("encoding DataOrdererRender");
         }
+        
+        // ~ Getting the tools  ==========================================
+        
         DataOrderer dataOrderer = (DataOrderer) component;
         ResponseWriter writer = context.getResponseWriter();
         LazyDataModel model = dataOrderer.getModel();
+
+        // ~ Root element  ===============================================
         
         writer.startElement("span", dataOrderer);
         writer.writeAttribute("id", dataOrderer.getClientId(context), "id");
-        if(dataOrderer.getStyleClass()!=null) {
-            writer.writeAttribute("class", dataOrderer.getStyleClass(), "styleClass");
+
+        // ~ Writing css class ===========================================
+        
+        String spanClass = "";
+        if(dataOrderer.getField().equals(model.getSortField())) {
+            if(model.getSortOrder()) {
+                spanClass = dataOrderer.getAscStyleClass();
+            } else {
+                spanClass = dataOrderer.getDescStyleClass();
+            }
         }
+        if(dataOrderer.getStyleClass()!=null) {
+            spanClass = String.format("%s %s", spanClass, dataOrderer.getStyleClass());
+        }
+        writer.writeAttribute("class", spanClass, "styleClass");
+        
+        // ~ Encoding link and parameters  =================================
         
         HtmlOutcomeTargetLink link = new HtmlOutcomeTargetLink();
         link.setIncludeViewParams(true);
         link.setValue(dataOrderer.getValue());
         link.setOutcome(context.getViewRoot().getViewId());
-        link.setStyleClass(dataOrderer.getField().equals(model.getSortField()) ? dataOrderer.getDescStyleClass() : dataOrderer.getAscStyleClass());
         
         UIParameter parSort = new UIParameter();
         parSort.setName("sort");
@@ -87,6 +105,8 @@ public class DataOrdererRenderer extends Renderer {
         link.encodeBegin(context);
         link.encodeChildren(context);
         link.encodeEnd(context);
+
+        // ~ Closing root element ===========================================
         
         writer.endElement("span");
     }
