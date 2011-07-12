@@ -133,6 +133,7 @@ limitations under the License.
       <groupId>com.sun.faces</groupId>
       <artifactId>jsf-api</artifactId>
       <version>${jsf-version}</version>
+      <optional>true</optional>
     </dependency>
 
     <!-- Servlet API ====================================================== -->
