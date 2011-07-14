@@ -17,6 +17,7 @@ package info.bluefoot.datamodel;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.model.DataModel;
 
@@ -45,6 +46,8 @@ import javax.faces.model.DataModel;
  *            is handling
  */
 public abstract class LazyDataModel<T> extends DataModel<T> implements Serializable {
+    public static final int DEFAULT_PAGE_SIZE = 3;
+    
     private Integer totalRowsCount;
     private Integer pageSize;
     private Integer currentPage;
@@ -53,17 +56,24 @@ public abstract class LazyDataModel<T> extends DataModel<T> implements Serializa
     private Integer numberOfPages;
     private String sortField;
     private Boolean sortOrder;
+    private Map<String, String> filters;
 
     // ~ Constructor ========================================================
     
+    /**
+     * Creates an instance with a page size of {@link #DEFAULT_PAGE_SIZE}.
+     */
     public LazyDataModel() {
-        this.pageSize = 3;
+        this.pageSize = LazyDataModel.DEFAULT_PAGE_SIZE;
         this.currentPage = 1;
         sortOrder = true;
     }
     
     // ~ Getters/setters ====================================================
 
+    /**
+     * Gets the number of pages of the query, based on {@link #getPageSize()}
+     */
     public Integer getNumberOfPages() {
         if(this.numberOfPages==null) {
             this.numberOfPages = (int) Math.ceil(getTotalRowsCount() * 1d / pageSize);;
@@ -73,7 +83,7 @@ public abstract class LazyDataModel<T> extends DataModel<T> implements Serializa
     
     public Integer getTotalRowsCount() {
         if(this.totalRowsCount==null) {
-            this.totalRowsCount = count();
+            this.totalRowsCount = count(this.filters);
         }
         return this.totalRowsCount;
     }
@@ -125,7 +135,7 @@ public abstract class LazyDataModel<T> extends DataModel<T> implements Serializa
     @Override
     public Object getWrappedData() {
         if (this.data == null) {
-            this.data = this.load((this.currentPage-1)*this.pageSize, this.pageSize, this.sortField, this.sortOrder);
+            this.data = this.load((this.currentPage-1)*this.pageSize, this.pageSize, this.sortField, this.sortOrder, this.filters);
         }
         return this.data;
     }
@@ -136,6 +146,16 @@ public abstract class LazyDataModel<T> extends DataModel<T> implements Serializa
             return -1;
         }
         return this.data.size();
+    }
+
+    /**
+     * Forces a refreshment of the data. Basic calls {@link #load(Integer, Integer, String, Boolean, Map)},
+     * then {@link #count(Map)}.
+     */
+    public void refreshData() {
+        this.data = this.load((this.currentPage-1)*this.pageSize, this.pageSize, this.sortField, this.sortOrder, this.filters);
+        this.totalRowsCount = count(this.filters);
+        this.numberOfPages = (int) Math.ceil(getTotalRowsCount() * 1d / pageSize);;
     }
 
     @Override
@@ -167,8 +187,40 @@ public abstract class LazyDataModel<T> extends DataModel<T> implements Serializa
         this.data = (List<T>) data;
     }
 
+    public Map<String, String> getFilters() {
+        return filters;
+    }
+    
+    public void setFilters(Map<String, String> filters) {
+        this.filters = filters;
+    }
+    
     // ~ Actions ===========================================================
 
-    public abstract List<T> load(Integer first, Integer pageSize, String sortField, Boolean sortOrder);
-    public abstract Integer count();
+    /**
+     * Removes an item of the in-memory-listing (i.e. only works for an item
+     * in the current page)
+     */
+    public void deleteItem(T item) {
+        this.data.remove(item);
+    }
+    
+    /**
+     * Loads a page of data.
+     * @param first first element to be loaded
+     * @param pageSize number of elements to be loaded
+     * @param sortField field so sort data with
+     * @param sortOrder ordering of the filter. <tt>true</tt> for ascendant. <tt>false</tt> for descendant.
+     * @param filters key/value of the filters
+     * @return a list with the data found. no more than <tt>pageSize</tt> elements will be loaded.
+     */
+    public abstract List<T> load(Integer first, Integer pageSize, String sortField, Boolean sortOrder, Map<String, String> filters);
+    
+    /**
+     * Counts how many items will be loaded with the given filters. Will not be
+     * bigger than {@link #pageSize}.
+     * @param filters key/value of the filters
+     * @return how many items found with the filters
+     */
+    public abstract Integer count(Map<String, String> filters);
 }
